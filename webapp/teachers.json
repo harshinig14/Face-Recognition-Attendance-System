@@ -1,0 +1,16 @@
+{
+    "admin": {
+        "username": "admin",
+        "password_hash": "scrypt:32768:8:1$7GGVHWrNKLdyMHgI$26033bbaf95c61e179e4cf012b8f48dde2c7e380792764a726f292e2d76a1a1ee8a4f9218fc2b8262cabf29d31aa29fdf5e75ab6ed16e18ec5d8a6a0f4d63972",
+        "full_name": "Administrator",
+        "email": "admin@school.edu",
+        "created_date": "2025-11-06"
+    },
+    "teacher": {
+        "username": "teacher",
+        "password_hash": "scrypt:32768:8:1$CzHT7C81eX7lna0W$97231b7367a072005ab9e6b4dec30ee91b7e8ab1d368e79d4e059db07633b8db5d270f5a536bd16968d357d7fff65cf90cf8a16d9aec71599c5cdd9e57f288a4",
+        "full_name": "Teacher",
+        "email": "teacher@school.edu",
+        "created_date": "2025-11-06"
+    }
+}
