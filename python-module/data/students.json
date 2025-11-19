@@ -1,8 +1,20 @@
 [
   {
     "id": 1,
-    "name": "Harshini",
+    "name": "Harini S",
     "register_number": "001",
+    "photos_captured": 5
+  },
+  {
+    "id": 2,
+    "name": "Harshini Ganesh",
+    "register_number": "002",
+    "photos_captured": 5
+  },
+  {
+    "id": 3,
+    "name": "Harshini Meharaj",
+    "register_number": "003",
     "photos_captured": 5
   }
 ]

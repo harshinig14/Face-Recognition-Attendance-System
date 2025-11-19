@@ -1,10 +1,22 @@
 {
-  "2025-11-13": [
-    {
-      "student_id": "1",
-      "name": "Harshini",
-      "time": "14:09:48",
-      "timestamp": "2025-11-13T14:09:48.206349"
+  "2025-11-19": {
+    "2": {
+      "name": "Harshini Ganesh",
+      "in_time": "09:09:44",
+      "out_time": null,
+      "status": "HALF DAY"
+    },
+    "1": {
+      "name": "Harini S",
+      "in_time": "09:10:28",
+      "out_time": null,
+      "status": "HALF DAY"
+    },
+    "3": {
+      "name": "Harshini Meharaj",
+      "in_time": null,
+      "out_time": null,
+      "status": "ABSENT"
     }
-  ]
+  }
 }
