@@ -2,12 +2,14 @@
 """
 Complete SimpleCameraService with IN/OUT attendance with TIME-BASED RULES
 
-✅ NEW RULES:
-- IN allowed ONLY before 12:01 PM
-- OUT between 12:01 PM - 1:00 PM → HALF DAY  
-- OUT after 3:00 PM → PRESENT (full day)
-- If IN exists but no OUT by end of day → HALF DAY (auto)
-- ABSENT: No IN time recorded by 12:01 PM
+✅ FIXED RULES:
+- IN allowed ONLY from 7:45 AM to 10:00 AM
+- OUT starts after 12:00 PM
+- OUT between 12:01 PM - 2:00 PM → HALF DAY
+- OUT after 2:50 PM to 5:00 PM → PRESENT (full day, shown in green)
+- After 5:00 PM → attendance closed for the day
+- No IN and no OUT → ABSENT
+- Only IN without OUT → HALF DAY
 - UNKNOWN faces are NOT logged, NOT buffered, NOT marked
 - Attendance saved in attendance.json as:
   { "YYYY-MM-DD": { "<id>": { "name": "...", "in_time": "...", "out_time": "...", "status": "PRESENT/HALF DAY/ABSENT" } } }
@@ -70,7 +72,7 @@ class SimpleCameraService:
         self._load_model()
         self._load_students()
         self._load_today_attendance()
-        
+
         # ✅ FIX: Initialize absent students immediately on load
         self._initialize_absent_students()
 
@@ -101,7 +103,6 @@ class SimpleCameraService:
         students_path = self.DATA_DIR / 'students.json'
         self.students = []
         self.label_dict = {}
-
         if students_path.exists():
             try:
                 with open(students_path, 'r') as f:
@@ -112,7 +113,6 @@ class SimpleCameraService:
                             self.students = data
                         elif isinstance(data, dict):
                             self.students = [data]
-
                 # build label dict
                 for s in self.students:
                     try:
@@ -124,7 +124,6 @@ class SimpleCameraService:
                             self.label_dict[str(sid)] = name
                     except Exception:
                         continue
-
                 print(f"✅ Loaded {len(self.students)} students.")
             except Exception as e:
                 print("❌ Error loading students.json:", e)
@@ -157,9 +156,7 @@ class SimpleCameraService:
                     all_data = json.loads(content) if content else {}
             else:
                 all_data = {}
-
             all_data[self.today] = self.todays_attendance
-
             with open(self.attendance_file, 'w') as f:
                 json.dump(all_data, f, indent=2)
         except Exception as e:
@@ -169,13 +166,12 @@ class SimpleCameraService:
     def _initialize_absent_students(self):
         """
         ✅ NEW: Mark all students without IN time as ABSENT immediately
-        This ensures absent count shows correctly before 12:01 PM auto-check
+        This ensures absent count shows correctly before 10:00 AM auto-check
         """
         try:
             for s in self.students:
                 sid = str(s.get('id'))
                 name = s.get('name')
-                
                 if sid not in self.todays_attendance:
                     # No record exists → mark as ABSENT
                     self.todays_attendance[sid] = {
@@ -184,7 +180,6 @@ class SimpleCameraService:
                         "out_time": None,
                         "status": "ABSENT"
                     }
-            
             # Save the initialized attendance
             self._save_attendance()
             print(f"✅ Initialized {len(self.students)} students in attendance (absent if no IN)")
@@ -197,7 +192,7 @@ class SimpleCameraService:
     def run_auto_absent_check(self):
         """
         ✅ NEW LOGIC:
-        1. Mark ABSENT for all students who don't have IN by 12:01 PM
+        1. Mark ABSENT for all students who don't have IN by 10:00 AM
         2. Mark HALF DAY for students with IN but no OUT time
         """
         try:
@@ -205,7 +200,6 @@ class SimpleCameraService:
             for s in self.students:
                 sid = str(s.get('id'))
                 name = s.get('name')
-
                 if sid not in self.todays_attendance:
                     # No IN recorded → mark ABSENT
                     self.todays_attendance[sid] = {
@@ -220,7 +214,6 @@ class SimpleCameraService:
                     if rec.get("in_time") and not rec.get("out_time"):
                         if rec.get("status") != "PRESENT":
                             rec["status"] = "HALF DAY"
-
             self._save_attendance()
             print("✅ Auto-absent check complete.")
         except Exception as e:
@@ -229,21 +222,20 @@ class SimpleCameraService:
     def _start_auto_scheduler(self):
         """
         Background daemon that triggers:
-        1. Auto-absent check at 12:01 PM
+        1. Auto-absent check at 10:00 AM
         2. Auto HALF DAY check at end of day (23:59)
         """
         def runner():
             already_ran_absent = None
             already_ran_halfday = None
-
             while True:
                 try:
                     now_dt = datetime.now()
                     now_date = now_dt.strftime('%Y-%m-%d')
                     now_time = now_dt.time()
 
-                    # ✅ Run auto-absent once per day at/after 12:01
-                    if now_date != already_ran_absent and now_time >= time_obj(12, 1):
+                    # ✅ Run auto-absent once per day at/after 10:00 AM
+                    if now_date != already_ran_absent and now_time >= time_obj(10, 0):
                         self._load_students()
                         self._load_today_attendance()
                         self.run_auto_absent_check()
@@ -254,10 +246,8 @@ class SimpleCameraService:
                         self._load_today_attendance()
                         self.run_auto_absent_check()  # This also handles HALF DAY
                         already_ran_halfday = now_date
-
                 except Exception as e:
                     print("⚠️ Auto-scheduler error:", e)
-
                 time.sleep(30)
 
         t = threading.Thread(target=runner, daemon=True)
@@ -277,9 +267,7 @@ class SimpleCameraService:
                             data = json.loads(content)
                 except Exception:
                     data = []
-
             data.append(entry)
-
             try:
                 with open(self.log_file, 'w') as f:
                     json.dump(data, f, indent=2)
@@ -301,8 +289,8 @@ class SimpleCameraService:
         with self.track_lock:
             active_tracks = {tid: t for tid, t in self.tracks.items()
                            if now - t['last_seen'] <= self.track_disappear_t}
-
             used_tracks = set()
+
             for i, c in enumerate(det_centroids):
                 best_tid = None
                 best_dist = None
@@ -411,17 +399,18 @@ class SimpleCameraService:
         return (None, None, None)
 
     # -------------------------
-    # ✅ NEW: IN / OUT Marking with TIME RULES
+    # ✅ FIXED: IN / OUT Marking with TIME RULES
     # -------------------------
     def _mark_in_time(self, student_id, name):
         """
-        ✅ NEW RULE: IN allowed ONLY before 12:01 PM
+        ✅ NEW RULE: IN allowed ONLY from 7:45 AM to 10:00 AM
         student_id: string
         """
         now = datetime.now()
+        current_time = now.time()
 
-        # ✅ Check if IN window is closed (after 12:01 PM)
-        if now.time() >= time_obj(12, 1):
+        # ✅ Check if IN window is open (7:45 AM to 10:00 AM)
+        if not (time_obj(7, 45) <= current_time < time_obj(10, 0)):
             return False
 
         # ensure todays_attendance entry
@@ -446,17 +435,23 @@ class SimpleCameraService:
 
     def _mark_out_time(self, student_id, name):
         """
-        ✅ NEW RULES:
-        - OUT between 12:01 PM - 1:00 PM → HALF DAY  
-        - OUT after 3:00 PM → PRESENT (full day)
+        ✅ FIXED RULES:
+        - OUT starts after 12:00 PM
+        - OUT between 12:00 PM - 2:00 PM → HALF DAY
+        - OUT after 2:50 PM to 5:00 PM → PRESENT (full day)
+        - After 5:00 PM → attendance closed
         - Can only mark OUT if IN exists
         student_id: string
         """
         now = datetime.now()
         current_time = now.time()
 
-        # ✅ Check if OUT window is open (after 12:01 PM)
-        if current_time < time_obj(12, 1):
+        # ✅ Check if OUT window is open (after 12:00 PM and before 5:00 PM)
+        if current_time < time_obj(12, 0):
+            return False
+        
+        # ✅ After 5:00 PM, attendance is closed
+        if current_time >= time_obj(17, 0):
             return False
 
         # Check if student has IN time
@@ -471,19 +466,26 @@ class SimpleCameraService:
         if rec.get("out_time") is None:
             rec["out_time"] = now.strftime("%H:%M:%S")
 
-            # ✅ Determine status based on OUT time
-            if time_obj(12, 1) <= current_time < time_obj(13, 0):
-                # OUT between 12:01 PM - 1:00 PM → HALF DAY
+            # ✅ FIXED: Determine status based on OUT time
+            # Parse the OUT time to compare properly
+            out_time_parts = rec["out_time"].split(":")
+            out_hour = int(out_time_parts[0])
+            out_minute = int(out_time_parts[1])
+            out_second = int(out_time_parts[2]) if len(out_time_parts) > 2 else 0
+            out_time_obj = time_obj(out_hour, out_minute, out_second)
+
+            if time_obj(12, 0) <= out_time_obj < time_obj(14, 0):
+                # OUT between 12:00 PM - 2:00 PM → HALF DAY
                 rec["status"] = "HALF DAY"
                 print(f"🟡 OUT recorded for {name} ({student_id}) at {rec['out_time']} → HALF DAY")
-            elif current_time >= time_obj(15, 0):
-                # OUT after 3:00 PM → PRESENT (full day)
+            elif out_time_obj >= time_obj(14, 50):
+                # ✅ FIXED: OUT at or after 2:50 PM → PRESENT (full day)
                 rec["status"] = "PRESENT"
                 print(f"🟢 OUT recorded for {name} ({student_id}) at {rec['out_time']} → PRESENT")
             else:
-                # Between 1:00 PM - 3:00 PM (waiting window)
+                # Between 2:00 PM - 2:50 PM (waiting window)
                 rec["status"] = "HALF DAY"
-                print(f"🟡 OUT recorded for {name} ({student_id}) at {rec['out_time']} → HALF DAY (before 3 PM)")
+                print(f"🟡 OUT recorded for {name} ({student_id}) at {rec['out_time']} → HALF DAY (before 2:50 PM)")
 
             self._save_attendance()
             return True
@@ -541,8 +543,8 @@ class SimpleCameraService:
             elapsed = start_time - last_frame_time
             if elapsed < self.frame_interval:
                 time.sleep(max(0.0, self.frame_interval - elapsed))
-
             last_frame_time = time.time()
+
             ret, frame = self.camera.read()
             if not ret:
                 continue
@@ -576,6 +578,7 @@ class SimpleCameraService:
             for i, bbox in enumerate(detections):
                 tid = assignment[i]
                 x, y, w, h = bbox
+
                 ex = int(w * 0.05); ey = int(h * 0.05)
                 x1 = max(0, x - ex); y1 = max(0, y - ey)
                 x2 = min(frame.shape[1], x + w + ex); y2 = min(frame.shape[0], y + h + ey)
@@ -591,7 +594,7 @@ class SimpleCameraService:
                 if stable_name:
                     # stable known identity detected
                     cv2.putText(display_frame, f"{stable_name} ({stable_conf:.1f}%)", (x, y - 8),
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
                     # mark per-track key to avoid repeated track-marking
                     with self.track_lock:
@@ -604,11 +607,11 @@ class SimpleCameraService:
                             ct = now.time()
                             sid_str = str(stable_label)
 
-                            # ✅ IN window: before 12:01 PM
-                            if ct < time_obj(12, 1):
+                            # ✅ IN window: 7:45 AM to 10:00 AM
+                            if time_obj(7, 45) <= ct < time_obj(10, 0):
                                 self._mark_in_time(sid_str, stable_name)
-                            # ✅ OUT window: after 12:01 PM
-                            elif ct >= time_obj(12, 1):
+                            # ✅ OUT window: 12:00 PM to 5:00 PM
+                            elif time_obj(12, 0) <= ct < time_obj(17, 0):
                                 self._mark_out_time(sid_str, stable_name)
 
                             # log known recognition event
@@ -634,10 +637,10 @@ class SimpleCameraService:
 
                     if transient:
                         cv2.putText(display_frame, f"{transient} (..)", (x, y - 8),
-                                  cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+                                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
                     else:
                         cv2.putText(display_frame, "Unknown", (x, y - 8),
-                                  cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 140, 255), 2)
+                                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 140, 255), 2)
 
             # cleanup old tracks
             self._cleanup_tracks()
@@ -661,7 +664,6 @@ class SimpleCameraService:
     # -------------------------
     def export_attendance_excel(self, date=None):
         from openpyxl import Workbook
-
         try:
             if date is None:
                 date = datetime.now().strftime('%Y-%m-%d')
@@ -692,7 +694,6 @@ class SimpleCameraService:
             wb = Workbook()
             ws = wb.active
             ws.title = "Attendance"
-
             headers = ["S.No", "ID", "Name", "IN Time", "OUT Time", "Status"]
             ws.append(headers)
 
@@ -701,9 +702,7 @@ class SimpleCameraService:
 
             export_path = self.DATA_DIR / f'attendance_{date}.xlsx'
             wb.save(export_path)
-
             return str(export_path)
-
         except Exception as e:
             print("❌ Export error:", e)
             return None
