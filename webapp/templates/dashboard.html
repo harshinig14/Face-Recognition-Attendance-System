@@ -13,466 +13,916 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 20px;
         }
 
-        header {
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-right: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            padding: 12px 30px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: #ecf0f1;
+        }
+
+        .nav-tab.active:hover {
+            background: #2c3e50;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Date Display */
+        .date-display {
             text-align: center;
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #667eea;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .date-display span {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            color: #34495e;
+            font-weight: 500;
         }
 
-        .date-info {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .stats-container {
+        /* Stats Cards */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
+            background: white;
+            padding: 30px;
             border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
         }
 
-        .stat-card h3 {
-            font-size: 0.9em;
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card.blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stat-card.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .stat-card.red {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .stat-content h3 {
+            font-size: 16px;
+            font-weight: 500;
             margin-bottom: 10px;
             opacity: 0.9;
         }
 
-        .stat-card .number {
-            font-size: 2.5em;
-            font-weight: bold;
+        .stat-content .stat-number {
+            font-size: 48px;
+            font-weight: 700;
         }
 
-        .controls-section {
-            background: #f8f9fa;
-            padding: 25px;
+        .stat-icon {
+            font-size: 50px;
+            opacity: 0.3;
+        }
+
+        /* Camera Control Section */
+        .camera-section {
+            background: white;
+            padding: 30px;
             border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
 
-        .controls-section h2 {
-            color: #333;
+        .camera-section h2 {
+            font-size: 22px;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
         }
 
-        .button-group {
+        .camera-controls {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
         }
 
-        button {
+        .btn {
             padding: 12px 30px;
-            font-size: 1em;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
         }
 
-        .btn-primary {
-            background: #28a745;
+        .btn-start {
+            background: #11998e;
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #218838;
+        .btn-start:hover {
+            background: #0d7d72;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
         }
 
-        .btn-danger {
-            background: #dc3545;
+        .btn-stop {
+            background: #eb3349;
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
+        .btn-stop:hover {
+            background: #c42838;
             transform: translateY(-2px);
         }
 
+        .btn-refresh {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-refresh:hover {
+            background: #d5dbdb;
+            transform: translateY(-2px);
+        }
+
+        /* Attendance Table Section */
         .attendance-section {
-            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
         }
 
         .attendance-section h2 {
-            color: #333;
+            font-size: 22px;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
         }
 
         thead {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
         }
 
-        th {
+        thead th {
+            color: white;
             padding: 15px;
             text-align: left;
             font-weight: 600;
+            font-size: 14px;
             text-transform: uppercase;
-            font-size: 0.85em;
             letter-spacing: 0.5px;
         }
 
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
+        tbody tr {
+            border-bottom: 1px solid #ecf0f1;
+            transition: background 0.2s ease;
         }
 
         tbody tr:hover {
             background: #f8f9fa;
         }
 
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            display: inline-block;
+        tbody td {
+            padding: 15px;
+            color: #2c3e50;
+            font-size: 15px;
         }
 
-        .status-present {
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.present {
             background: #d4edda;
             color: #155724;
         }
 
-        .status-half {
+        .status-badge.half-day {
             background: #fff3cd;
             color: #856404;
         }
 
-        .status-absent {
+        .status-badge.absent {
             background: #f8d7da;
             color: #721c24;
         }
 
-        .no-data {
+        .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #999;
-            font-style: italic;
+            padding: 60px 20px;
+            color: #95a5a6;
         }
 
-        .history-controls {
-            display: flex;
-            gap: 15px;
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
             margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Reports & Analytics Tab */
+        .alert-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
             align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 30px;
+        }
+
+        .alert-content h3 {
+            font-size: 16px;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .alert-content p {
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .alert-content a {
+            color: #856404;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .report-controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
-        .history-controls label {
+        .report-controls label {
             font-weight: 600;
-            color: #333;
+            color: #2c3e50;
         }
 
-        .history-controls select {
+        .report-controls select {
             padding: 10px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid #ecf0f1;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 15px;
+            color: #2c3e50;
             cursor: pointer;
+            min-width: 250px;
+        }
+
+        .report-controls input {
+            padding: 10px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #2c3e50;
             min-width: 200px;
         }
 
-        .history-controls select:focus {
-            outline: none;
-            border-color: #667eea;
+        .btn-export {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-export:hover {
+            background: #2980b9;
         }
 
-        .btn-export {
-            background: #17a2b8;
+        .btn-apply {
+            background: #27ae60;
             color: white;
         }
 
-        .btn-export:hover {
-            background: #138496;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        .btn-apply:hover {
+            background: #219653;
         }
 
+        .btn-view-defaulters {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-view-defaulters:hover {
+            background: #c0392b;
+        }
+
+        .defaulters-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .defaulters-section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e74c3c;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #ecf0f1;
+        }
+
+        .date-range-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .date-range-controls .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .date-range-controls .date-input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .student-report-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .student-report-preview h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .stats-container {
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            table {
-                font-size: 0.9em;
+            .header-title h1 {
+                font-size: 24px;
             }
 
-            th, td {
-                padding: 10px;
-            }
-
-            .button-group {
+            .camera-controls {
                 flex-direction: column;
             }
 
-            button {
+            .btn {
                 width: 100%;
+                justify-content: center;
+            }
+
+            .report-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .report-controls select,
+            .report-controls input {
+                width: 100%;
+            }
+
+            .date-range-controls {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🎓 Face Recognition Attendance System</h1>
-            <p class="date-info">📅 {{ today }}</p>
-        </header>
-
-        <!-- Statistics Cards -->
-        <div class="stats-container">
-            <div class="stat-card">
-                <h3>Total Students</h3>
-                <div class="number">{{ total_students }}</div>
-            </div>
-            <div class="stat-card">
-                <h3>Present Today</h3>
-                <div class="number">{{ present_count }}</div>
-            </div>
-            <div class="stat-card">
-                <h3>Absent Today</h3>
-                <div class="number">{{ absent_count }}</div>
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">🎓</div>
+            <div class="header-title">
+                <h1>Face Recognition Attendance System</h1>
             </div>
         </div>
 
-        <!-- Camera Controls -->
-        <div class="controls-section">
-            <h2>📷 Camera Control</h2>
-            <div class="button-group">
-                <button class="btn-primary" onclick="startCamera()">▶ Start Camera</button>
-                <button class="btn-danger" onclick="stopCamera()">⏹ Stop Camera</button>
-                <button class="btn-secondary" onclick="refreshAttendance()">🔄 Refresh</button>
-            </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('reports')">Reports & Analytics</button>
         </div>
 
-        <!-- Today's Attendance -->
-        <div class="attendance-section">
-            <h2>📋 Today's Attendance</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>S.NO</th>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>IN TIME</th>
-                        <th>OUT TIME</th>
-                        <th>STATUS</th>
-                    </tr>
-                </thead>
-                <tbody id="todayAttendanceTable">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <!-- Date Display -->
+            <div class="date-display">
+                <span>📅 {{ today }}</span>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-content">
+                        <h3>Total Students</h3>
+                        <div class="stat-number">{{ total_students }}</div>
+                    </div>
+                    <div class="stat-icon">👥</div>
+                </div>
+
+                <div class="stat-card green">
+                    <div class="stat-content">
+                        <h3>Present Today</h3>
+                        <div class="stat-number">{{ present_count }}</div>
+                    </div>
+                    <div class="stat-icon">✓</div>
+                </div>
+
+                <div class="stat-card red">
+                    <div class="stat-content">
+                        <h3>Absent Today</h3>
+                        <div class="stat-number">{{ absent_count }}</div>
+                    </div>
+                    <div class="stat-icon">✗</div>
+                </div>
+            </div>
+
+            <!-- Camera Control -->
+            <div class="camera-section">
+                <h2>📷 Camera Control</h2>
+                <div class="camera-controls">
+                    <button class="btn btn-start" onclick="startCamera()">
+                        ▶ Start Camera
+                    </button>
+                    <button class="btn btn-stop" onclick="stopCamera()">
+                        ⏹ Stop Camera
+                    </button>
+                    <button class="btn btn-refresh" onclick="refreshData()">
+                        🔄 Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Today's Attendance Table -->
+            <div class="attendance-section">
+                <h2>📋 Today's Attendance</h2>
+                <div class="table-wrapper">
                     {% if attendance_records %}
-                        {% for record in attendance_records %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ record.id }}</td>
-                            <td>{{ record.name }}</td>
-                            <td>{{ record.intime }}</td>
-                            <td>{{ record.outtime }}</td>
-                            <td>
-                                <span class="status-badge 
-                                    {% if record.status == 'PRESENT' %}status-present
-                                    {% elif record.status == 'HALF DAY' %}status-half
-                                    {% else %}status-absent{% endif %}">
-                                    {{ record.status }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>IN TIME</th>
+                                <th>OUT TIME</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in attendance_records %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ record.id }}</td>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.intime }}</td>
+                                <td>{{ record.outtime }}</td>
+                                <td>
+                                    {% if record.status == 'PRESENT' %}
+                                    <span class="status-badge present">Present</span>
+                                    {% elif record.status == 'HALF DAY' %}
+                                    <span class="status-badge half-day">Half Day</span>
+                                    {% else %}
+                                    <span class="status-badge absent">Absent</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {% else %}
-                        <tr>
-                            <td colspan="6" class="no-data">No attendance records for today yet. Start the camera to begin taking attendance.</td>
-                        </tr>
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p>No attendance records for today yet. Start the camera to begin taking attendance.</p>
+                    </div>
                     {% endif %}
-                </tbody>
-            </table>
+                </div>
+            </div>
+
+            <!-- Attendance History Section -->
+            <div class="attendance-section">
+                <h2>📊 Attendance History</h2>
+                <div class="report-controls">
+                    <label for="historyDateSelect">Select Date:</label>
+                    <select id="historyDateSelect" onchange="loadAttendanceByDate()">
+                        <option value="">-- Select a date --</option>
+                    </select>
+                    <button class="btn btn-export" onclick="exportAttendanceByDate()">
+                        📥 Export to Excel
+                    </button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="historyAttendanceTable">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>IN TIME</th>
+                                <th>OUT TIME</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 40px;">
+                                    Select a date to view attendance history
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <!-- Attendance History -->
-        <div class="attendance-section">
-            <h2>📊 Attendance History</h2>
-            <div class="history-controls">
-                <label for="dateSelect">Select Date:</label>
-                <select id="dateSelect" onchange="loadAttendanceByDate()">
-                    <option value="">-- Select a date --</option>
-                </select>
-                <button class="btn-export" onclick="exportAttendance()">📥 Export to Excel</button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>S.NO</th>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>IN TIME</th>
-                        <th>OUT TIME</th>
-                        <th>STATUS</th>
-                    </tr>
-                </thead>
-                <tbody id="historyAttendanceTable">
-                    <tr>
-                        <td colspan="6" class="no-data">Select a date to view attendance</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-                <!-- Student Reports & Defaulter Alerts -->
-        <div class="attendance-section">
-            <h2>📊 Student Reports & Analytics</h2>
-            
-            <!-- Defaulter Alert Banner -->
-            <div id="defaulterBanner" style="display: none; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <h3 style="color: #856404; margin: 0 0 10px 0;">⚠️ Attendance Defaulters Alert</h3>
-                <p style="color: #856404; margin: 0;" id="defaulterCount"></p>
-            </div>
-            
-            <!-- Student Selection -->
-            <div class="history-controls">
-                <label for="studentSelect">Select Student:</label>
-                <select id="studentSelect" onchange="loadStudentReport()">
-                    <option value="">-- Select a student --</option>
-                </select>
-                <button class="btn-export" onclick="exportStudentReport()">📥 Export Student Report</button>
-                <button class="btn-secondary" onclick="viewAllDefaulters()">⚠️ View Defaulters</button>
-            </div>
-            
-            <!-- Student Analytics Display -->
-            <div id="studentReportCard" style="display: none; background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 20px;">
-                <h3 id="reportStudentName" style="margin-bottom: 15px;"></h3>
-                
-                <div class="stats-container">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
-                        <h3>Attendance %</h3>
-                        <div class="number" id="reportPercentage">0%</div>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-                        <h3>Present Days</h3>
-                        <div class="number" id="reportPresent">0</div>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
-                        <h3>Half Days</h3>
-                        <div class="number" id="reportHalfDay">0</div>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
-                        <h3>Absent Days</h3>
-                        <div class="number" id="reportAbsent">0</div>
-                    </div>
+        <!-- Reports & Analytics Tab -->
+        <div id="reports" class="tab-content">
+            <!-- Defaulters Alert -->
+            <div class="alert-box">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h3>Attendance Defaulters Alert</h3>
+                    <p id="defaulters-alert">Loading defaulters information...</p>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px;">
-                    <div style="background: white; padding: 15px; border-radius: 10px;">
-                        <strong>Late Arrivals:</strong> <span id="reportLate">0</span>
+            </div>
+
+            <!-- Report Controls -->
+            <div class="report-controls">
+                <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <label>Select Student:</label>
+                        <select id="studentSelect">
+                            <option value="">-- Select a student --</option>
+                            {% for student in students_list %}
+                            <option value="{{ student.id }}">{{ student.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div style="background: white; padding: 15px; border-radius: 10px;">
-                        <strong>Early Departures:</strong> <span id="reportEarly">0</span>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 10px;">
-                        <strong>Total Days:</strong> <span id="reportTotal">0</span>
-                    </div>
-                    <div style="background: white; padding: 15px; border-radius: 10px;">
-                        <strong>Status:</strong> <span id="reportStatus">-</span>
+                    
+                    <div class="date-range-controls">
+                        <div class="date-input-group">
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div class="date-input-group">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate">
+                        </div>
+                        <button class="btn btn-apply" onclick="applyDateFilter()" style="margin-top: 25px;">
+                            ✅ Apply Filter
+                        </button>
+                        <button class="btn btn-export" onclick="exportStudentReport()" style="margin-top: 25px;">
+                            📥 Export to Excel
+                        </button>
+                        <button class="btn btn-view-defaulters" onclick="scrollToDefaulters()" style="margin-top: 25px;">
+                            ⚠️ View Defaulters
+                        </button>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Student Report Preview Section -->
+            <div class="student-report-preview" id="studentReportPreview" style="display: none;">
+                <h2>📊 Student Report Preview</h2>
+                <div id="reportSummary" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                    <!-- Summary will be loaded here -->
+                </div>
+                <div class="table-wrapper">
+                    <table id="studentReportTable">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>DATE</th>
+                                <th>IN TIME</th>
+                                <th>OUT TIME</th>
+                                <th>STATUS</th>
+                                <th>LATE?</th>
+                                <th>EARLY?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentReportTbody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px;">
+                                    Apply date filter to preview student report
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Defaulters Table -->
-            <div id="defaultersSection" style="display: none;">
-                <h3 style="color: #dc3545; margin-bottom: 15px;">⚠️ Students Below 75% Attendance</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>S.NO</th>
-                            <th>ID</th>
-                            <th>NAME</th>
-                            <th>ATTENDANCE %</th>
-                            <th>PRESENT</th>
-                            <th>ABSENT</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody id="defaultersTable">
-                        <tr>
-                            <td colspan="7" class="no-data">No defaulters found</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="defaulters-section" id="defaulters-section">
+                <h2>⚠️ Students Below 75% Attendance</h2>
+                <div class="table-wrapper">
+                    <table id="defaulters-table">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>ATTENDANCE %</th>
+                                <th>PRESENT</th>
+                                <th>ABSENT</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="defaulters-tbody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px;">
+                                    Loading attendance data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Load available dates on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            loadAvailableDates();
-        });
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+            
+            // Load defaulters when reports tab is opened
+            if (tabName === 'reports') {
+                loadDefaulters();
+                setDefaultDates();
+            }
+            
+            // Load available dates when dashboard tab is opened
+            if (tabName === 'dashboard') {
+                loadAvailableDates();
+            }
+        }
 
+        // Set default date range (last 30 days)
+        function setDefaultDates() {
+            const today = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            
+            document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
+
+        // Apply date filter and preview student report
+        function applyDateFilter() {
+            const studentId = document.getElementById('studentSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!studentId) {
+                alert('Please select a student first');
+                return;
+            }
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+            
+            if (startDate > endDate) {
+                alert('Start date cannot be after end date');
+                return;
+            }
+            
+            // Show loading state
+            document.getElementById('studentReportTbody').innerHTML = 
+                '<tr><td colspan="7" style="text-align: center; padding: 40px;">Loading student report...</td></tr>';
+            document.getElementById('studentReportPreview').style.display = 'block';
+            
+            // Fetch student report with date range
+            fetch(`/api/individual_report/${studentId}?start_date=${startDate}&end_date=${endDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('studentReportTbody').innerHTML = 
+                            `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #e74c3c;">Error: ${data.error}</td></tr>`;
+                        return;
+                    }
+                    
+                    // Update summary
+                    const summaryHTML = `
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div><strong>Student:</strong> ${data.student_name} (ID: ${data.student_id})</div>
+                            <div><strong>Date Range:</strong> ${startDate} to ${endDate}</div>
+                            <div><strong>Total Days:</strong> ${data.total_days}</div>
+                            <div><strong>Present:</strong> ${data.present_days}</div>
+                            <div><strong>Half Days:</strong> ${data.half_days}</div>
+                            <div><strong>Absent:</strong> ${data.absent_days}</div>
+                            <div><strong>Attendance %:</strong> ${data.attendance_percentage}%</div>
+                            <div><strong>Status:</strong> <span class="status-badge ${data.is_defaulter ? 'absent' : 'present'}">${data.is_defaulter ? 'DEFAULTER' : 'GOOD STANDING'}</span></div>
+                        </div>
+                    `;
+                    document.getElementById('reportSummary').innerHTML = summaryHTML;
+                    
+                    // Update table
+                    if (data.attendance_history && data.attendance_history.length > 0) {
+                        let tableHTML = '';
+                        data.attendance_history.forEach((record, index) => {
+                            const statusClass = 
+                                record.status === 'PRESENT' ? 'present' :
+                                record.status === 'HALF DAY' ? 'half-day' : 'absent';
+                            
+                            tableHTML += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${record.date}</td>
+                                    <td>${record.in_time}</td>
+                                    <td>${record.out_time}</td>
+                                    <td>
+                                        <span class="status-badge ${statusClass}">${record.status}</span>
+                                    </td>
+                                    <td>${record.is_late ? 'YES' : 'NO'}</td>
+                                    <td>${record.is_early ? 'YES' : 'NO'}</td>
+                                </tr>
+                            `;
+                        });
+                        document.getElementById('studentReportTbody').innerHTML = tableHTML;
+                    } else {
+                        document.getElementById('studentReportTbody').innerHTML = 
+                            '<tr><td colspan="7" style="text-align: center; padding: 40px;">No attendance records found for the selected date range</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading student report:', error);
+                    document.getElementById('studentReportTbody').innerHTML = 
+                        '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #e74c3c;">Error loading student report</td></tr>';
+                });
+        }
+
+        // Load available dates for history section
         function loadAvailableDates() {
             fetch('/api/attendance_dates')
                 .then(response => response.json())
                 .then(data => {
-                    const select = document.getElementById('dateSelect');
+                    const select = document.getElementById('historyDateSelect');
                     select.innerHTML = '<option value="">-- Select a date --</option>';
                     
                     data.dates.forEach(date => {
@@ -485,50 +935,88 @@
                 .catch(error => console.error('Error loading dates:', error));
         }
 
+        // Load attendance by selected date
         function loadAttendanceByDate() {
-            const date = document.getElementById('dateSelect').value;
+            const date = document.getElementById('historyDateSelect').value;
             if (!date) {
                 document.getElementById('historyAttendanceTable').innerHTML = 
-                    '<tr><td colspan="6" class="no-data">Select a date to view attendance</td></tr>';
+                    '<thead><tr><th>S.NO</th><th>ID</th><th>NAME</th><th>IN TIME</th><th>OUT TIME</th><th>STATUS</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 40px;">Select a date to view attendance history</td></tr></tbody>';
                 return;
             }
 
             fetch(`/api/attendance_by_date?date=${date}`)
                 .then(response => response.json())
                 .then(data => {
-                    const tbody = document.getElementById('historyAttendanceTable');
+                    const table = document.getElementById('historyAttendanceTable');
                     
                     if (data.attendance && data.attendance.length > 0) {
-                        tbody.innerHTML = '';
+                        let tableHTML = `
+                            <thead>
+                                <tr>
+                                    <th>S.NO</th>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>IN TIME</th>
+                                    <th>OUT TIME</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        `;
+                        
                         data.attendance.forEach((record, index) => {
                             const statusClass = 
-                                record.status === 'PRESENT' ? 'status-present' :
-                                record.status === 'HALF DAY' ? 'status-half' : 'status-absent';
+                                record.status === 'PRESENT' ? 'present' :
+                                record.status === 'HALF DAY' ? 'half-day' : 'absent';
                             
-                            tbody.innerHTML += `
+                            tableHTML += `
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td>${record.id}</td>
                                     <td>${record.name}</td>
                                     <td>${record.intime}</td>
                                     <td>${record.outtime}</td>
-                                    <td><span class="status-badge ${statusClass}">${record.status}</span></td>
+                                    <td>
+                                        <span class="status-badge ${statusClass}">${record.status}</span>
+                                    </td>
                                 </tr>
                             `;
                         });
+                        
+                        tableHTML += '</tbody>';
+                        table.innerHTML = tableHTML;
                     } else {
-                        tbody.innerHTML = '<tr><td colspan="6" class="no-data">No attendance records for this date</td></tr>';
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>S.NO</th>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>IN TIME</th>
+                                    <th>OUT TIME</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 40px;">
+                                        No attendance records for this date
+                                    </td>
+                                </tr>
+                            </tbody>
+                        `;
                     }
                 })
                 .catch(error => {
                     console.error('Error loading attendance:', error);
                     document.getElementById('historyAttendanceTable').innerHTML = 
-                        '<tr><td colspan="6" class="no-data">Error loading attendance data</td></tr>';
+                        '<thead><tr><th>S.NO</th><th>ID</th><th>NAME</th><th>IN TIME</th><th>OUT TIME</th><th>STATUS</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 40px; color: #e74c3c;">Error loading attendance data</td></tr></tbody>';
                 });
         }
 
-        function exportAttendance() {
-            const date = document.getElementById('dateSelect').value;
+        // Export attendance by selected date
+        function exportAttendanceByDate() {
+            const date = document.getElementById('historyDateSelect').value;
             if (!date) {
                 alert('Please select a date first!');
                 return;
@@ -537,19 +1025,20 @@
             window.location.href = `/api/export_attendance?date=${date}`;
         }
 
+        // Camera Controls
         function startCamera() {
             fetch('/api/start_camera')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('✅ Camera started successfully!');
+                        alert('Camera started successfully!');
                     } else {
-                        alert('❌ Failed to start camera');
+                        alert('Failed to start camera');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('❌ Error starting camera');
+                    alert('Error starting camera');
                 });
         }
 
@@ -557,164 +1046,111 @@
             fetch('/api/stop_camera')
                 .then(response => response.json())
                 .then(data => {
-                    alert('⏹️ Camera stopped');
-                    refreshAttendance();
+                    if (data.success) {
+                        alert('Camera stopped successfully!');
+                    }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
-        function refreshAttendance() {
+        function refreshData() {
             location.reload();
         }
 
-        // Auto-refresh attendance every 10 seconds
-        setInterval(() => {
-            fetch('/api/todays_attendance')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById('todayAttendanceTable');
-                    
-                    if (data.attendance && data.attendance.length > 0) {
-                        tbody.innerHTML = '';
-                        data.attendance.forEach((record, index) => {
-                            const statusClass = 
-                                record.status === 'PRESENT' ? 'status-present' :
-                                record.status === 'HALF DAY' ? 'status-half' : 'status-absent';
-                            
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td>${record.id}</td>
-                                    <td>${record.name}</td>
-                                    <td>${record.intime}</td>
-                                    <td>${record.outtime}</td>
-                                    <td><span class="status-badge ${statusClass}">${record.status}</span></td>
-                                </tr>
-                            `;
-                        });
-                    }
-                })
-                .catch(error => console.error('Error refreshing:', error));
-        }, 10000);
-
-                // Load student analytics on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            loadAvailableDates();
-            loadStudentAnalytics();
-        });
-
-        function loadStudentAnalytics() {
+        // Load Defaulters
+        function loadDefaulters() {
             fetch('/api/students_analytics')
                 .then(response => response.json())
                 .then(data => {
-                    // Populate student dropdown
-                    const select = document.getElementById('studentSelect');
-                    select.innerHTML = '<option value="">-- Select a student --</option>';
-                    
-                    data.students.forEach(student => {
-                        const option = document.createElement('option');
-                        option.value = student.id;
-                        option.textContent = `${student.name} (${student.id}) - ${student.attendance_percentage}%`;
-                        select.appendChild(option);
-                    });
-                    
-                    // Show defaulter banner if any
-                    if (data.total_defaulters > 0) {
-                        document.getElementById('defaulterBanner').style.display = 'block';
-                        document.getElementById('defaulterCount').textContent = 
-                            `${data.total_defaulters} student(s) have attendance below 75%. Click "View Defaulters" to see details.`;
-                    }
-                })
-                .catch(error => console.error('Error loading analytics:', error));
-        }
-
-        function loadStudentReport() {
-            const studentId = document.getElementById('studentSelect').value;
-            if (!studentId) {
-                document.getElementById('studentReportCard').style.display = 'none';
-                return;
-            }
-
-            fetch(`/api/individual_report/${studentId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Show report card
-                    document.getElementById('studentReportCard').style.display = 'block';
-                    document.getElementById('reportStudentName').textContent = 
-                        `${data.student_name} (ID: ${data.student_id})`;
-                    
-                    // Update stats
-                    document.getElementById('reportPercentage').textContent = data.attendance_percentage + '%';
-                    document.getElementById('reportPresent').textContent = data.present_days;
-                    document.getElementById('reportHalfDay').textContent = data.half_days;
-                    document.getElementById('reportAbsent').textContent = data.absent_days;
-                    document.getElementById('reportLate').textContent = data.late_arrivals;
-                    document.getElementById('reportEarly').textContent = data.early_departures;
-                    document.getElementById('reportTotal').textContent = data.total_days;
-                    
-                    // Status with color
-                    const statusSpan = document.getElementById('reportStatus');
-                    if (data.is_defaulter) {
-                        statusSpan.innerHTML = '<span class="status-badge status-absent">DEFAULTER</span>';
-                    } else {
-                        statusSpan.innerHTML = '<span class="status-badge status-present">GOOD STANDING</span>';
-                    }
-                })
-                .catch(error => console.error('Error loading student report:', error));
-        }
-
-        function exportStudentReport() {
-            const studentId = document.getElementById('studentSelect').value;
-            if (!studentId) {
-                alert('Please select a student first!');
-                return;
-            }
-
-            window.location.href = `/api/export_student_report/${studentId}`;
-        }
-
-        function viewAllDefaulters() {
-            fetch('/api/students_analytics')
-                .then(response => response.json())
-                .then(data => {
-                    const section = document.getElementById('defaultersSection');
-                    const tbody = document.getElementById('defaultersTable');
+                    const tbody = document.getElementById('defaulters-tbody');
+                    const alertText = document.getElementById('defaulters-alert');
                     
                     if (data.defaulters && data.defaulters.length > 0) {
-                        section.style.display = 'block';
-                        tbody.innerHTML = '';
+                        alertText.innerHTML = `${data.defaulters.length} student(s) have attendance below 75%. <a href="#defaulters-section">View Defaulters</a> to see details.`;
                         
+                        tbody.innerHTML = '';
                         data.defaulters.forEach((student, index) => {
-                            tbody.innerHTML += `
+                            const row = `
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td>${student.id}</td>
                                     <td>${student.name}</td>
-                                    <td><span class="status-badge status-absent">${student.attendance_percentage}%</span></td>
+                                    <td>
+                                        <span class="status-badge ${student.attendance_percentage < 50 ? 'absent' : 'half-day'}">
+                                            ${student.attendance_percentage}%
+                                        </span>
+                                    </td>
                                     <td>${student.present_days}</td>
                                     <td>${student.absent_days}</td>
-                                    <td><button class="btn-secondary" style="padding: 6px 12px; font-size: 0.9em;" 
-                                        onclick="viewStudentDetails('${student.id}')">View Details</button></td>
+                                    <td>
+                                        <button class="action-btn" onclick="viewStudentDetails('${student.id}')">
+                                            👁️ View Details
+                                        </button>
+                                    </td>
                                 </tr>
                             `;
+                            tbody.innerHTML += row;
                         });
                     } else {
-                        section.style.display = 'block';
-                        tbody.innerHTML = '<tr><td colspan="7" class="no-data">No defaulters found. All students have attendance ≥ 75%</td></tr>';
+                        alertText.textContent = 'Great! All students have attendance above 75%.';
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #27ae60;">✓ No defaulters found. All students have good attendance!</td></tr>';
                     }
-                    
-                    // Scroll to defaulters section
-                    section.scrollIntoView({ behavior: 'smooth' });
                 })
-                .catch(error => console.error('Error loading defaulters:', error));
+                .catch(error => {
+                    console.error('Error loading defaulters:', error);
+                    document.getElementById('defaulters-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #e74c3c;">Error loading data</td></tr>';
+                });
+        }
+
+        function scrollToDefaulters() {
+            document.getElementById('defaulters-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportStudentReport() {
+            const studentId = document.getElementById('studentSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!studentId) {
+                alert('Please select a student first');
+                return;
+            }
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+            
+            if (startDate > endDate) {
+                alert('Start date cannot be after end date');
+                return;
+            }
+            
+            window.location.href = `/api/export_student_report/${studentId}?start_date=${startDate}&end_date=${endDate}`;
         }
 
         function viewStudentDetails(studentId) {
-            document.getElementById('studentSelect').value = studentId;
-            loadStudentReport();
-            document.getElementById('studentReportCard').scrollIntoView({ behavior: 'smooth' });
+            window.location.href = `/api/individual_report/${studentId}`;
         }
 
+        // Auto-refresh attendance every 30 seconds when on dashboard
+        setInterval(() => {
+            if (document.getElementById('dashboard').classList.contains('active')) {
+                fetch('/api/todays_attendance')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Attendance updated:', data);
+                        // You can update the table here without full page refresh if needed
+                    });
+            }
+        }, 30000);
+
+        // Load available dates on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadAvailableDates();
+        });
     </script>
 </body>
 </html>

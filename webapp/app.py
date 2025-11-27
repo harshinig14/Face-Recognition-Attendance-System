@@ -217,12 +217,16 @@ def students_analytics():
         'threshold': 75.0
     })
 
-# ✅ FIXED: Get detailed individual student report
+# ✅ FIXED: Get detailed individual student report with PROPER date range filter
 @app.route('/api/individual_report/<student_id>')
 def individual_report(student_id):
-    """Generate detailed report for individual student"""
+    """Generate detailed report for individual student with proper date filtering"""
     attendance = load_attendance_full()
     students = load_students()
+    
+    # Get date range parameters
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
     
     student = next((s for s in students if str(s['id']) == str(student_id)), None)
     if not student:
@@ -230,7 +234,7 @@ def individual_report(student_id):
     
     student_name = student.get('name', 'Unknown')
     
-    # Detailed attendance history
+    # Detailed attendance history - ONLY within date range
     attendance_history = []
     present_days = 0
     half_days = 0
@@ -238,8 +242,21 @@ def individual_report(student_id):
     late_arrivals = 0
     early_departures = 0
     
-    # ✅ FIX: Loop through all attendance dates
-    for date, day_records in sorted(attendance.items()):
+    # Get all dates in the attendance system that are within the specified range
+    all_dates_in_range = []
+    
+    for date in sorted(attendance.keys()):
+        # Skip dates outside the specified range
+        if start_date and date < start_date:
+            continue
+        if end_date and date > end_date:
+            continue
+        all_dates_in_range.append(date)
+    
+    # Now process only the dates in the range
+    for date in all_dates_in_range:
+        day_records = attendance[date]
+        
         if student_id in day_records:
             record = day_records[student_id]
             status = record.get('status', 'ABSENT')
@@ -286,7 +303,7 @@ def individual_report(student_id):
             elif status == 'ABSENT':
                 absent_days += 1
         else:
-            # Not marked = absent
+            # Student not marked for this day = absent
             attendance_history.append({
                 'date': date,
                 'in_time': '-',
@@ -297,15 +314,24 @@ def individual_report(student_id):
             })
             absent_days += 1
     
-    # ✅ FIX: Calculate percentage based on student's actual attendance
-    total_days = len(attendance)
+    # Calculate percentage based ONLY on dates in the specified range
+    total_days_in_range = len(all_dates_in_range)
+    
+    if total_days_in_range == 0:
+        # If no dates in range, try to get some default range
+        if not start_date and not end_date:
+            # If no date range specified, use all dates
+            total_days_in_range = len(attendance)
+        else:
+            total_days_in_range = 0
+    
     attended_days = present_days + (half_days * 0.5)
-    attendance_percentage = (attended_days / total_days * 100) if total_days > 0 else 0
+    attendance_percentage = (attended_days / total_days_in_range * 100) if total_days_in_range > 0 else 0
     
     return jsonify({
         'student_id': student_id,
         'student_name': student_name,
-        'total_days': total_days,
+        'total_days': total_days_in_range,
         'present_days': present_days,
         'half_days': half_days,
         'absent_days': absent_days,
@@ -313,18 +339,26 @@ def individual_report(student_id):
         'early_departures': early_departures,
         'attendance_percentage': round(attendance_percentage, 2),
         'is_defaulter': attendance_percentage < 75.0,
-        'attendance_history': attendance_history
+        'attendance_history': attendance_history,
+        'date_range': {
+            'start_date': start_date,
+            'end_date': end_date
+        }
     })
 
-# ✅ NEW: Export individual student report to Excel
+# ✅ UPDATED: Export individual student report to Excel with PROPER date range filter
 @app.route('/api/export_student_report/<student_id>')
 def export_student_report(student_id):
-    """Export individual student report to Excel"""
+    """Export individual student report to Excel with proper date range filtering"""
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
     
     try:
-        # Get student report data
+        # Get date range parameters
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+        
+        # Get student report data with PROPER date range filter
         report_response = individual_report(student_id)
         report_data = report_response.get_json()
         
@@ -336,10 +370,18 @@ def export_student_report(student_id):
         ws = wb.active
         ws.title = "Student Report"
         
-        # Title
+        # Title with date range info
+        date_range_text = ""
+        if start_date and end_date:
+            date_range_text = f" (From {start_date} to {end_date})"
+        elif start_date:
+            date_range_text = f" (From {start_date})"
+        elif end_date:
+            date_range_text = f" (Until {end_date})"
+        
         ws.merge_cells('A1:F1')
         title_cell = ws['A1']
-        title_cell.value = f"INDIVIDUAL ATTENDANCE REPORT"
+        title_cell.value = f"INDIVIDUAL ATTENDANCE REPORT{date_range_text}"
         title_cell.font = Font(name='Arial', size=16, bold=True, color="FFFFFF")
         title_cell.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
         title_cell.alignment = Alignment(horizontal='center', vertical='center')
@@ -351,13 +393,27 @@ def export_student_report(student_id):
         ws['A4'] = "Student Name:"
         ws['B4'] = report_data['student_name']
         
-        for cell in ['A3', 'A4']:
-            ws[cell].font = Font(name='Arial', size=11, bold=True)
+        # Date Range Info
+        if start_date or end_date:
+            ws['A5'] = "Date Range:"
+            range_text = ""
+            if start_date and end_date:
+                range_text = f"{start_date} to {end_date}"
+            elif start_date:
+                range_text = f"From {start_date}"
+            elif end_date:
+                range_text = f"Until {end_date}"
+            ws['B5'] = range_text
+        
+        for cell in ['A3', 'A4', 'A5']:
+            if cell in ['A3', 'A4'] or (cell == 'A5' and (start_date or end_date)):
+                ws[cell].font = Font(name='Arial', size=11, bold=True)
         
         # Summary Statistics
-        ws['A6'] = "ATTENDANCE SUMMARY"
-        ws['A6'].font = Font(name='Arial', size=12, bold=True)
-        ws['A6'].fill = PatternFill(start_color="E7E6E6", end_color="E7E6E6", fill_type="solid")
+        summary_start_row = 7 if (start_date or end_date) else 6
+        ws[f'A{summary_start_row}'] = "ATTENDANCE SUMMARY"
+        ws[f'A{summary_start_row}'].font = Font(name='Arial', size=12, bold=True)
+        ws[f'A{summary_start_row}'].fill = PatternFill(start_color="E7E6E6", end_color="E7E6E6", fill_type="solid")
         
         summary_data = [
             ("Total Working Days:", report_data['total_days']),
@@ -370,7 +426,7 @@ def export_student_report(student_id):
             ("Status:", "DEFAULTER (Below 75%)" if report_data['is_defaulter'] else "GOOD STANDING")
         ]
         
-        for i, (label, value) in enumerate(summary_data, 7):
+        for i, (label, value) in enumerate(summary_data, summary_start_row + 1):
             ws[f'A{i}'] = label
             ws[f'B{i}'] = value
             ws[f'A{i}'].font = Font(name='Arial', size=11, bold=True)
@@ -385,12 +441,12 @@ def export_student_report(student_id):
                     ws[f'B{i}'].fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
         
         # Attendance History Table
-        header_row = 16
+        header_row = summary_start_row + len(summary_data) + 2
         ws[f'A{header_row}'] = "DETAILED ATTENDANCE HISTORY"
         ws[f'A{header_row}'].font = Font(name='Arial', size=12, bold=True)
         
         headers = ["Date", "IN Time", "OUT Time", "Status", "Late?", "Early?"]
-        header_row = 17
+        header_row = header_row + 1
         
         for col_num, header in enumerate(headers, 1):
             cell = ws.cell(row=header_row, column=col_num)
@@ -399,7 +455,7 @@ def export_student_report(student_id):
             cell.fill = PatternFill(start_color="5B9BD5", end_color="5B9BD5", fill_type="solid")
             cell.alignment = Alignment(horizontal='center', vertical='center')
         
-        # Data rows
+        # Data rows - ONLY the filtered data
         for idx, record in enumerate(report_data['attendance_history'], header_row + 1):
             ws.cell(row=idx, column=1, value=record['date'])
             ws.cell(row=idx, column=2, value=record['in_time'])
@@ -430,13 +486,20 @@ def export_student_report(student_id):
         ws.column_dimensions['F'].width = 10
         
         # Save file
-        export_path = DATA_DIR / f'student_report_{student_id}.xlsx'
+        date_suffix = f"_{start_date}_to_{end_date}" if start_date and end_date else ""
+        export_path = DATA_DIR / f'student_report_{student_id}{date_suffix}.xlsx'
         wb.save(export_path)
+        
+        # Create download filename
+        download_name = f'student_report_{report_data["student_name"]}_{student_id}'
+        if start_date and end_date:
+            download_name += f'_{start_date}_to_{end_date}'
+        download_name += '.xlsx'
         
         return send_file(
             export_path,
             as_attachment=True,
-            download_name=f'student_report_{report_data["student_name"]}_{student_id}.xlsx',
+            download_name=download_name,
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
     
@@ -796,6 +859,7 @@ def recognition_logs():
     except Exception as e:
         print(f"Error reading log file: {e}")
         return jsonify([]), 500
+
 
 @app.route('/api/status')
 def status():
