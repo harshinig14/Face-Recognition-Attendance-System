@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2025-11-30",
+    "rollno": "004",
+    "intime": "09:30:00",
+    "outtime": "14:15:00",
+    "status": "HALF DAY"
+  },
+  {
+    "date": "2025-11-30",
+    "rollno": "004",
+    "intime": "09:30:00",
+    "outtime": "15:30:00",
+    "status": "PRESENT"
+  },
+  {
+    "date": "2025-12-01",
+    "rollno": "004",
+    "intime": "09:43:06",
+    "outtime": "19:35:10",
+    "status": "HALF DAY"
+  },
+  {
+    "date": "2025-12-03",
+    "rollno": "004",
+    "intime": "10:07:16",
+    "outtime": "12:27:34",
+    "status": "HALF DAY"
+  }
+]
