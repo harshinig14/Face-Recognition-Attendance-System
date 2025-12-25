@@ -26,5 +26,52 @@
     "intime": "10:07:16",
     "outtime": "12:27:34",
     "status": "HALF DAY"
+  },
+  {
+    "date": "2025-12-04",
+    "rollno": "004",
+    "intime": "10:07:16",
+    "outtime": "13:22:30",
+    "status": "HALF DAY"
+  },
+  {
+    "date": "2025-12-06",
+    "rollno": "001",
+    "intime": "10:07:16",
+    "outtime": "17:37:47",
+    "status": "PRESENT",
+    "name": "Harshini Ganesh"
+  },
+  {
+    "date": "2025-12-14",
+    "rollno": "002",
+    "name": "Harini S",
+    "intime": "11:58:11",
+    "outtime": "",
+    "status": "PRESENT"
+  },
+  {
+    "date": "2025-12-14",
+    "rollno": "001",
+    "name": "Harshini Ganesh",
+    "intime": "11:58:53",
+    "outtime": "",
+    "status": "PRESENT"
+  },
+  {
+    "date": "2025-12-21",
+    "rollno": "001",
+    "name": "Harshini Ganesh",
+    "intime": "11:34:49",
+    "outtime": "",
+    "status": "PRESENT"
+  },
+  {
+    "date": "2025-12-21",
+    "rollno": "002",
+    "name": "Harini S",
+    "intime": "11:49:19",
+    "outtime": "",
+    "status": "PRESENT"
   }
 ]
